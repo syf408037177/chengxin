@@ -2,6 +2,7 @@ package com.chengxin.sync_job.config;
 
 import com.chengxin.sync_job.job.SyncPurchaseInJob;
 import org.quartz.*;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.quartz.CronTriggerFactoryBean;
@@ -15,6 +16,8 @@ import org.springframework.scheduling.quartz.SchedulerFactoryBean;
  **/
 @Configuration
 public class QuartzConfiguration {
+    @Value("${sync_cron}")
+    private String syncCron;
 
     /**
      *  配置任务
@@ -58,7 +61,7 @@ public class QuartzConfiguration {
         tigger.setJobDetail(syncJob);
 
         //cron表达式，每1分钟执行一次
-        tigger.setCronExpression("0 0/1 * * * ?");
+        tigger.setCronExpression(syncCron);
         tigger.setName("syncTrigger");
         return tigger;
     }

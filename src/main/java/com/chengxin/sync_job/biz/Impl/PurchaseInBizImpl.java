@@ -1,7 +1,9 @@
 package com.chengxin.sync_job.biz.Impl;
 
 import com.chengxin.sync_job.biz.IPurchaseInBiz;
-import com.chengxin.sync_job.domain.PurchaseInEntity;
+import com.chengxin.sync_job.dao.IPurchaseInDao;
+import com.chengxin.sync_job.domain.PurchaseInParentEntity;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -13,9 +15,11 @@ import java.util.List;
  **/
 @Service
 public class PurchaseInBizImpl implements IPurchaseInBiz {
+    @Autowired
+    private IPurchaseInDao purchaseInDao;
 
     @Override
-    public List<PurchaseInEntity> findPurchaseInNoTransfer() {
-        return null;
+    public List<PurchaseInParentEntity> findPurchaseInNoTransfer() {
+        return purchaseInDao.findPurchaseInParentNotTransfer();
     }
 }
