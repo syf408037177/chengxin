@@ -22,13 +22,14 @@ public class SyncPurchaseInJob {
 
     public void sync() {
         System.out.println("任务执行一次,时间:" + new Date());
-        List<PurchaseInParentEntity> purchaseInParentList = purchaseInBiz.findPurchaseInNoTransfer();
-        for (PurchaseInParentEntity entity : purchaseInParentList) {
-            System.out.println(entity);
-            List<PurchaseInChildEntity> childs = entity.getPurchaseInChilds();
-            for (PurchaseInChildEntity child : childs) {
-                System.out.println(child);
-            }
-        }
+//        List<PurchaseInParentEntity> purchaseInParentList = purchaseInBiz.findPurchaseInNoTransfer();
+//        for (PurchaseInParentEntity entity : purchaseInParentList) {
+//            System.out.println(entity);
+//            List<PurchaseInChildEntity> childs = entity.getPurchaseInChilds();
+//            for (PurchaseInChildEntity child : childs) {
+//                System.out.println(child);
+//            }
+//        }
     }
 }
+

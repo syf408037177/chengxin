@@ -1,0 +1,375 @@
+html{
+    font-family: 微软雅黑;
+    font-size:10px;
+    height:100%;
+}
+body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+ul{
+    list-style-type: none;
+    margin:0;
+    padding:0;
+}
+#menutree li {
+    cursor: pointer;
+    height: 27px;
+    line-height: 27px;
+}
+#menutree li:hover{
+   color: white;
+   background: #cccccc;
+}
+.iconfont{
+    font-size:18px;
+    color:#ff9372;
+}
+a{
+    text-decoration: none;
+    cursor: pointer;
+    color:#464c5b;
+}
+a:focus { outline:0; }
+.window-shadow{
+    background: none;
+    -moz-box-shadow: none;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+    filter: progid:DXImageTransform.Microsoft.Blur(pixelRadius=2, MakeShadow=false, ShadowOpacity=0.2);
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    border-radius: 5px;
+}
+.window  .window-header{padding:0;}
+.window .window-header .panel-title{padding:12px 15px;}
+.window .window-header .panel-with-icon{padding-left:35px;}
+.dialog-button {
+    border-top: none;
+    background: none;
+    padding: 5px 30px;
+}
+.messager-button{
+    padding-right:5px;
+}
+.dialog-button a{
+    border: 1px solid #C5C5C5;
+    margin-bottom:10px;
+}
+.dialog-button a:hover{
+    border: 1px solid #C5C5C5;
+}
+.messager-button a:nth-child(1) {
+    background: #541b86;
+}
+.messager-button a:nth-child(1):hover {
+    background: #7747ab;
+}
+.messager-button a:nth-child(1) span{
+    color:#fff;
+}
+.l-btn:active, .l-btn-plan:active{
+    background:#d9dfe7;
+}
+.l-btn-text{
+    color: #464c5b;
+    font-size: 1.4rem;
+    margin: 4px 10px;
+}
+
+.datagrid-row{
+    height:30px;
+}
+.datagrid-header-row{
+    background:#f2f2f2;
+    height:30px;
+    font-size:14px;
+    font-weight:bold;
+    text-align: center;
+}
+.datagrid-row:hover {
+    background: #C6E2FF;
+}
+.datagrid-row-selected{
+    background: #C6E2FF;
+}
+.datagrid-header .datagrid-cell span{
+    font-size:12px;
+}
+
+.combobox-item-hover{
+    background-color: #dddddd;
+}
+.textbox-focused {
+    border-color: #ffbea1;
+    -moz-box-shadow: none;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+}
+.textbox .textbox-text{
+    box-shadow:none;
+}
+.textbox-invalid {
+    border-color: #ccc;
+    background-color: #fff;
+}
+.textbox-invalid.textbox-focused {
+    border-color: #ffaea1;
+    -moz-box-shadow: 0 0 3px #ffaea1;
+    -webkit-box-shadow: 0 0 3px #ffaea1;
+    box-shadow: 0 0 3px #ffaea1;
+}
+.combo-panel {
+    border: 1px solid #ffbea1;
+}
+.combo-p{
+    margin:0;
+}
+
+.panel-header, .panel-body, .accordion {
+    border-color: #d7dde4;
+}
+.panel-body-noheader {
+    border-top-width: 0;
+}
+.datagrid-toolbar .l-btn{
+    height:30px !important;
+    line-height: 30px;
+}
+.datagrid-toolbar .l-btn:hover{
+    border-width: 0;
+    padding: 1px;
+}
+.datagrid-toolbar .l-btn .l-btn-left .l-btn-text{
+    margin: 3px 10px;
+}
+.datagrid-toolbar .l-btn .l-btn-icon-left .l-btn-text {
+    margin: 3px 10px 1px 25px;
+}
+
+/*查询按钮*/
+.search{
+    min-width:63px;
+    border-radius:3px;
+    background: #541b86;
+}
+.search span{
+    color:#ffffff;
+    font-size:14px;
+}
+.search:hover{
+    background:#7747ab;
+}
+/*重置*/
+.reset{
+    min-width:63px;
+    border-radius:3px;
+    background: #e0e0e0;
+}
+.reset span{
+    font-size:14px;
+}
+.reset:hover{
+    background:#c5c5c5;
+}
+
+/*下拉框样式*/
+.selectcss{
+    width:120px;
+    height:28px;
+    border:1px solid #dddddd;
+}
+/*保存*/
+.save{
+    min-width:63px;
+    height:32px;
+    border-radius:3px;
+    background: #541b86;
+}
+.save:hover{
+    background: #7747ab;
+}
+.save span{
+    font-size:1.4rem;
+    color: #fff;
+}
+/*取消*/
+.cancel, .call{
+    min-width:63px;
+    height:32px;
+    border-radius:3px;
+}
+/*icon样式*/
+.l-btn-icon {
+    width: 18px;
+    height: 18px;
+    line-height: 18px;
+    position: absolute;
+    top: 50%;
+    margin-top: -9px;
+}
+.pagination-next {
+    background-position: -30px center;
+}
+.pagination-last {
+    background-position: -44px center;
+}
+
+/*日历*/
+.calendar-header {
+    background: #dcdcdc;
+}
+.calendar-day{
+    background-color: #fff;
+    color: #657180;
+}
+.calendar-today{
+    color: #1B8CF2;
+    font-weight: 100;
+}
+.calendar-nav-hover{
+    background-color: #ccc;
+}
+.calendar-selected {
+    background-color: #a970e6;
+    color: #fff;
+}
+.calendar-text.calendar-nav-hover,
+.calendar-nextmonth.calendar-nav-hover,
+.calendar-nextyear.calendar-nav-hover,
+.calendar-prevmonth.calendar-nav-hover,
+.calendar-prevyear.calendar-nav-hover
+{ background-color:#ccc;}
+
+.calendar-day.calendar-nav-hover{
+    font-weight:100;
+}
+.datebox-calendar-inner .calendar{
+    padding: 0;
+}
+.datebox-calendar-inner .calendar-header {
+    -moz-border-radius: 0;
+    -webkit-border-radius: 0;
+    border-radius: 0;
+}
+
+
+.messager-body{
+    padding: 15px 10px;
+}
+.messager-icon{
+    margin: 0px 10px 0 15px ;
+}
+
+
+/*newstyle*/
+label{
+    background: none!important;
+    border: none!important;
+}
+
+input{
+    border: 1px solid #ccc;
+    border-radius: 2px;
+}
+input:focus {
+    border: 1px solid #ffbea1;
+    outline: none;
+    box-shadow: none;
+}
+
+.textbox-label{
+    width: 120px;
+    text-align: right!important;
+    font-size: 12px;
+    height:34px!important;
+    line-height:34px!important;
+}
+
+.datagrid-toolbar {
+    padding: 0!important;
+}
+.toolbar-margin{
+    margin: 3px 10px;
+}
+.icon-line{
+    display: inline-block;
+    margin:3px 5px 0;
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+}
+.text-line{
+    color: #2e64be;
+    padding: 0 5px;
+}
+.flex-style{
+    display: -webkit-box;
+    display: -moz-box;
+    display:-webkit-flex;
+    display: -ms-flexbox;
+    display:flex;
+}
+
+.reset-button{
+    width:60px;
+    border-radius:5px;
+    background: #e0e0e0;
+}
+.reset-button:hover{
+    background: #c5c5c5;
+}
+
+@media screen and (min-width: 300px) {
+    .accordion .accordion-header{
+        width: auto!important;
+        background-color:#e2e0e1;
+        height: 21px;
+    }
+    .accordion .panel, .accordion .datagrid{
+        width: auto!important;
+    }
+    .accordion .accordion-body{
+        width: auto!important;
+        padding:5px 0;
+    }
+    .search-form{
+        width: 100%!important;
+        padding:0;
+        margin:0;
+    }
+    .search-form div{
+        float: left;
+        margin: 5px 10px;
+        height: 34px;
+        line-height: 100%;
+    }
+    .search-form .textbox {
+        min-width: 150px;
+        border-radius: 2px;
+    }
+    .search-form .textbox .textbox-text{
+        min-width: 110px;
+        width:auto;
+    }
+    .search-form .l-btn:hover{
+        border-width: 0;
+        padding: 1px;
+    }
+    .search-form li{
+        list-style-type: none;
+        float: left;
+        margin: 5px 10px;
+        height: 34px;
+        line-height: 100%;
+    }
+    .query-reset{
+        float: right!important;
+        margin: 50px 50px 10px 0!important;
+        width: auto!important;
+    }
+}
