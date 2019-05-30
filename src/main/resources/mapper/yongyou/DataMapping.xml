@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.chengxin.sync_job.dao.yongyou.IDataMappingDao">
+
+    <!--查询供应商编码-->
+    <select id="getProviderCode" resultType="string">
+       SELECT provy_code FROM [dbo].sgBasProvInfo WHERE prov_code = #{erpProviderCode}
+    </select>
+
+    <!--查询公司编码-->
+    <select id="getCompanyCode" resultType="string">
+        SELECT provy_code FROM [dbo].bd_purorg WHERE name = #{erpCompanyName}
+    </select>
+
+    <!--查询存货基本id-->
+    <select id="getCbaseid" resultType="string">
+        SELECT DISTINCT pk_invbasdoc FROM [dbo].bd_invbasdoc WHERE invcode = #{erpProdCode}
+    </select>
+
+    <!--查询存货管理-->
+    <select id="getCmangid" resultType="string">
+        SELECT DISTINCT pk_invmandoc FROM [dbo].bd_invmandoc WHERE pk_invbasdoc = #{cbaseId} AND pk_corp = #{pkCorp}
+    </select>
+
+    <!--查询供应商id-->
+    <select id="getProvId" resultType="string">
+        SELECT DISTINCT pk_cumandoc FROM [dbo].bd_cumandoc
+        WHERE pk_cubasdoc = (SELECT DISTINCT pk_cubasdoc FROM [dbo].bd_cubasdoc WHERE custname = #{provYName} AND pk_corp = #{pkCorp})
+        AND (custflag = 1 OR custflag = 3)
+    </select>
+
+</mapper>

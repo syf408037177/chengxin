@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.chengxin.sync_job.dao.erp.IPurchaseOrderDao">
+
+    <!--采购订单主表字段-->
+    <sql id="PurchaseOrderParentColumn">
+        par.BILL_ID,
+        par.order_id,
+        par.SETDATE
+    </sql>
+
+    <!--采购入库子表字段-->
+    <sql id="PurchaseOrderChildColumn">
+        del.DETAIL_ID,
+        del.PROD_Code,
+        del.PriceUnit_qty,
+        del.pack_price,
+        del.pack_priceUnit
+    </sql>
+
+    <!--主表映射-->
+    <resultMap id="BaseParentResultMap" type="com.chengxin.sync_job.domain.PurchaseOrderParentEntity">
+        <result column="DETAIL_ID" property="detailId"/>
+        <result column="BILL_ID" property="billId"/>
+        <result column="order_id" property="orderId"/>
+        <result column="ownercorp" property="pkCorp"/>
+        <result column="pk_purorg" property="cpurOrganization"/>
+        <result column="SETDATE" property="setDate"/>
+        <result column="provY_Name" property="provName"/>
+        <result column="pk_deptdoc" property="cdeptId"/>
+        <collection property="purchaseOrderChilds" column="order_id" javaType="ArrayList"
+                    ofType="com.chengxin.sync_job.domain.PurchaseOrderChildEntity"
+                    select="com.chengxin.sync_job.dao.erp.IPurchaseOrderDao.findPurchaseOrderChildByParentId">
+        </collection>
+    </resultMap>
+
+    <!--子表映射-->
+    <resultMap id="BaseChildResultMap" type="com.chengxin.sync_job.domain.PurchaseOrderChildEntity">
+        <result column="PROD_Code" property="prodCode"/>
+        <result column="PriceUnit_qty" property="priceUnitQty"/>
+        <result column="pack_price" property="packPrice"/>
+        <result column="unitY_code" property="packPriceUnit"/>
+    </resultMap>
+
+    <!--查询未传输至用友的采购订单数据-->
+    <select id="findPurchaseOrderParentNotTransfer" resultMap="BaseParentResultMap">
+        SELECT * FROM (
+          SELECT
+            <include refid="PurchaseOrderParentColumn"/>, cor.pk_purorg, cor.ownercorp, cor.pk_deptdoc, pro.provY_name,
+            ROW_NUMBER() OVER(ORDER BY par.SETDATE DESC) AS RowId
+          FROM [dbo].SgPpmOrder par
+          LEFT JOIN [dbo].sgBasProvInfo pro
+          ON par.PROV_ID = pro.prov_code
+          LEFT JOIN [dbo].sgBasCorpInfo cor
+          ON par.receive_corpcode = cor.CORP_ID
+          WHERE bill_flag = '11000000' AND yyfinish_flag != 1 OR yyfinish_flag IS NULL
+        ) as b
+        WHERE RowId BETWEEN 0 AND #{purchaseOrderCount}
+    </select>
+
+    <!--查询传输失败的采购订单数据-->
+    <select id="findPurchaseOrderParentFail" resultMap="BaseParentResultMap">
+        SELECT * FROM (
+          SELECT
+            <include refid="PurchaseOrderParentColumn"/>, cor.pk_purorg, cor.ownercorp, cor.pk_deptdoc, pro.provY_name,
+            ROW_NUMBER() OVER(ORDER BY par.SETDATE DESC) AS RowId
+            FROM [dbo].SgPpmOrder par
+            LEFT JOIN [dbo].sgBasProvInfo pro
+            ON par.PROV_ID = pro.prov_code
+            LEFT JOIN [dbo].sgBasCorpInfo cor
+            ON par.receive_corpcode = cor.CORP_ID
+            WHERE bill_flag = '11000000' AND yyfinish_flag = 3
+        ) as b
+        WHERE RowId BETWEEN 0 AND 1
+    </select>
+
+    <!--根据主表id查询子表数据-->
+    <select id="findPurchaseOrderChildByParentId" parameterType="java.lang.String" resultMap="BaseChildResultMap">
+        SELECT
+          <include refid="PurchaseOrderChildColumn"/>, un.unitY_code
+        FROM [dbo].SgPpmOrderDetail del
+        LEFT JOIN [dbo].sgBasUnits un
+        ON del.pack_priceUnit = un.UNIT_CODE
+        WHERE del.order_id = #{parentId}
+    </select>
+
+    <!--修改采购订单推送状态-->
+    <select id="updatePurchaseOrderStatus" resultMap="BaseChildResultMap">
+        <if test="parentIds != null and parentIds.size() > 0">
+            UPDATE [dbo].SgPpmOrder SET yyfinish_flag = #{yyFinishFlag}
+            WHERE order_id in
+            <foreach collection="parentIds" item="item" index="index" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+    </select>
+</mapper>

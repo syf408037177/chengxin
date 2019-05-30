@@ -5,25 +5,17 @@ import java.util.List;
 /**
  * @author Mr.Song
  * @create 2019-05-06 13:49
- * @desc 采购入库数据实体
+ * @desc 采购入库主表数据实体
  **/
 public class PurchaseInParentEntity {
-    private String billType;//业务类型
-    private String creatorCode;//操作员
-    private String wareCode;//仓库ID
+    private String creatorCode;//审批人id
     private String corpCode;//库存组织/公司
-    private String operateDate;//单据日期
+    private String corpName;//库存组织/公司名称
+    private String operateDate;//最后修改日期
+    private String createDate;//制单日期/订单日期
     private String specialCode;//供应商
     private String status;//传输状态
     private List<PurchaseInChildEntity> purchaseInChilds;
-
-    public String getBillType() {
-        return billType;
-    }
-
-    public void setBillType(String billType) {
-        this.billType = billType;
-    }
 
     public String getCreatorCode() {
         return creatorCode;
@@ -33,20 +25,20 @@ public class PurchaseInParentEntity {
         this.creatorCode = creatorCode;
     }
 
-    public String getWareCode() {
-        return wareCode;
-    }
-
-    public void setWareCode(String wareCode) {
-        this.wareCode = wareCode;
-    }
-
     public String getCorpCode() {
         return corpCode;
     }
 
     public void setCorpCode(String corpCode) {
         this.corpCode = corpCode;
+    }
+
+    public String getCorpName() {
+        return corpName;
+    }
+
+    public void setCorpName(String corpName) {
+        this.corpName = corpName;
     }
 
     public String getOperateDate() {
@@ -81,16 +73,23 @@ public class PurchaseInParentEntity {
         this.purchaseInChilds = purchaseInChilds;
     }
 
+    public String getCreateDate() {
+        return createDate;
+    }
+
+    public void setCreateDate(String createDate) {
+        this.createDate = createDate;
+    }
+
     @Override
     public String toString() {
         return "PurchaseInParentEntity{" +
-                "billType='" + billType + '\'' +
-                ", creatorCode='" + creatorCode + '\'' +
-                ", wareCode='" + wareCode + '\'' +
+                "creatorCode='" + creatorCode + '\'' +
                 ", corpCode='" + corpCode + '\'' +
                 ", operateDate='" + operateDate + '\'' +
+                ", createDate='" + createDate + '\'' +
                 ", specialCode='" + specialCode + '\'' +
-                ", status=" + status +
+                ", status='" + status + '\'' +
                 ", purchaseInChilds=" + purchaseInChilds +
                 '}';
     }

@@ -1,6 +1,7 @@
 package com.chengxin.sync_job.util;
 
-import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.JSON;
+
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLSession;
@@ -17,6 +18,7 @@ import java.util.Map;
  * @desc http请求工具类
  **/
 public class HttpUtil {
+
     public static final String DEF_CHATSET = "UTF-8";
     public static final int DEF_CONN_TIMEOUT = 30000;
     public static final int DEF_READ_TIMEOUT = 30000;
@@ -29,19 +31,20 @@ public class HttpUtil {
     };
 
     //配置您申请的KEY
-    public static final String APICODE ="*************************";
+    public static final String APICODE ="42da48ecfffd4790b903b6d4f33ec422";
 
     //1.API方法
     public static void getRequest(){
         String result =null;
-        String url ="https://api.yonyoucloud.com/apis/u8c/ic/purchasein_save_sign";//请求接口地址
+        String url ="http://223.95.171.130:9000/u8cloud/api/ic/purchasein/insert";//请求接口地址
         String method = "POST";
         String paramFormat = "form";
         Map<String, Object> params = new HashMap<String, Object>();//请求参数
-        params.put("GeneralBillVO", "");
+        params.put("GeneralBillVO_45", "[{'ParentVO':{'cbizid':'','cbiztype':'','ccustomerid':'','cdilivertypeid':'','cdispatcherid':'','cdptid':'','coperatorid':'demo1','cotherwhid':'','cproviderid':'','cwarehouseid':'ck01','cwastewarehouseid':'','cwhsmanagerid':'','dbilldate':'2018-09-28','pk_calbody':'1000','pk_corp':'1000','vbillcode':'','vdiliveraddress':'','pk_measware':'','vuserdef0':'','pk_defdoc0':'','vuserdef1':'','pk_defdoc1':'','vuserdef2':'','pk_defdoc2':'','vuserdef3':'','pk_defdoc3':'','vuserdef4':'','pk_defdoc4':'','vuserdef5':'','pk_defdoc5':'','vuserdef6':'','pk_defdoc6':'','vuserdef7':'','pk_defdoc7':'','vuserdef8':'','pk_defdoc8':'','vuserdef9':'','pk_defdoc9':'','vuserdef10':'','pk_defdoc10':'','vuserdef11':'','pk_defdoc11':'','vuserdef12':'','pk_defdoc12':'','vuserdef13':'','pk_defdoc13':'','vuserdef14':'','pk_defdoc14':'','vuserdef15':'','pk_defdoc15':'','vuserdef16':'','pk_defdoc16':'','vuserdef17':'','pk_defdoc17':'','vuserdef18':'','pk_defdoc18':'','vuserdef19':'','pk_defdoc19':''\t},\t'ChildrenVO':[{'nmny':'','nprice':'','castunitid':'','ninassistnum':'','ninnum':'20.11','nshouldinassistnum':'','nshouldinnum':'','vproductbatch':'','dstandbydate':'','dbizdate':'','vbatchcode':'','cinventoryid':'030100','dvalidate':'','vreceiveaddress':'','ncountnum':'','hsl':'','vnotebody':'','cvendorid':'','vtransfercode':'','vvehiclecode':'','bonroadflag':'','flargess':'','ccorrespondcode':'','ccostobject':'','cprojectid':'','cprojectphaseid':'','fchecked':'','vuserdef1':'','pk_defdoc1':'','vuserdef2':'','pk_defdoc2':'','vuserdef3':'','pk_defdoc3':'','vuserdef4':'','pk_defdoc4':'','vuserdef5':'','pk_defdoc5':'','vuserdef6':'','pk_defdoc6':'','vuserdef7':'','pk_defdoc7':'','vuserdef8':'','pk_defdoc8':'','vuserdef9':'','pk_defdoc9':'','vuserdef10':'','pk_defdoc10':'','vuserdef11':'','pk_defdoc11':'','vuserdef12':'','pk_defdoc12':'','vuserdef13':'','pk_defdoc13':'','vuserdef14':'','pk_defdoc14':'','vuserdef15':'','pk_defdoc15':'','vuserdef16':'','pk_defdoc16':'','vuserdef17':'','pk_defdoc17':'','vuserdef18':'','pk_defdoc18':'','vuserdef19':'','pk_defdoc19':'','vuserdef20':'','pk_defdoc20':'','vfree1':'','vfree2':'','vfree3':'','vfree4':'','vfree5':'','vfree6':'','vfree7':'','vfree8':'','vfree9':'','vfree10':'','barcodevos':[{'nnumber':'','vbarcode':'','vbarcodesub':'','vboxbarcode':''}]}]}]");
 
         Map<String, Object> headerParams = new HashMap<String, Object>();//请求头参数
         headerParams.put("apicode", APICODE);//APICODE
+        headerParams.put("needStackTrace", "Y");
         headerParams.put("system", "");
         headerParams.put("trantype", "code");
 
@@ -107,7 +110,7 @@ public class HttpUtil {
                         else if("application/xml".equals(contentType))
                             out.write(xmlencode(params).getBytes("utf-8"));
                         else
-                            out.write(jsonencode(params).getBytes("utf-8"));
+                            out.write("{'GeneralBillVO_45':[{'ParentVO':{'cbizid':'','cbiztype':'','ccustomerid':'','cdilivertypeid':'','cdispatcherid':'','cdptid':'','coperatorid':'demo1','cotherwhid':'','cproviderid':'','cwarehouseid':'ck01','cwastewarehouseid':'','cwhsmanagerid':'','dbilldate':'2018-09-28','pk_calbody':'1000','pk_corp':'1000','vbillcode':'','vdiliveraddress':'','pk_measware':'','vuserdef0':'','pk_defdoc0':'','vuserdef1':'','pk_defdoc1':'','vuserdef2':'','pk_defdoc2':'','vuserdef3':'','pk_defdoc3':'','vuserdef4':'','pk_defdoc4':'','vuserdef5':'','pk_defdoc5':'','vuserdef6':'','pk_defdoc6':'','vuserdef7':'','pk_defdoc7':'','vuserdef8':'','pk_defdoc8':'','vuserdef9':'','pk_defdoc9':'','vuserdef10':'','pk_defdoc10':'','vuserdef11':'','pk_defdoc11':'','vuserdef12':'','pk_defdoc12':'','vuserdef13':'','pk_defdoc13':'','vuserdef14':'','pk_defdoc14':'','vuserdef15':'','pk_defdoc15':'','vuserdef16':'','pk_defdoc16':'','vuserdef17':'','pk_defdoc17':'','vuserdef18':'','pk_defdoc18':'','vuserdef19':'','pk_defdoc19':''\t},\t'ChildrenVO':[{'nmny':'','nprice':'','castunitid':'','ninassistnum':'','ninnum':'20.11','nshouldinassistnum':'','nshouldinnum':'','vproductbatch':'','dstandbydate':'','dbizdate':'','vbatchcode':'','cinventoryid':'030100','dvalidate':'','vreceiveaddress':'','ncountnum':'','hsl':'','vnotebody':'','cvendorid':'','vtransfercode':'','vvehiclecode':'','bonroadflag':'','flargess':'','ccorrespondcode':'','ccostobject':'','cprojectid':'','cprojectphaseid':'','fchecked':'','vuserdef1':'','pk_defdoc1':'','vuserdef2':'','pk_defdoc2':'','vuserdef3':'','pk_defdoc3':'','vuserdef4':'','pk_defdoc4':'','vuserdef5':'','pk_defdoc5':'','vuserdef6':'','pk_defdoc6':'','vuserdef7':'','pk_defdoc7':'','vuserdef8':'','pk_defdoc8':'','vuserdef9':'','pk_defdoc9':'','vuserdef10':'','pk_defdoc10':'','vuserdef11':'','pk_defdoc11':'','vuserdef12':'','pk_defdoc12':'','vuserdef13':'','pk_defdoc13':'','vuserdef14':'','pk_defdoc14':'','vuserdef15':'','pk_defdoc15':'','vuserdef16':'','pk_defdoc16':'','vuserdef17':'','pk_defdoc17':'','vuserdef18':'','pk_defdoc18':'','vuserdef19':'','pk_defdoc19':'','vuserdef20':'','pk_defdoc20':'','vfree1':'','vfree2':'','vfree3':'','vfree4':'','vfree5':'','vfree6':'','vfree7':'','vfree8':'','vfree9':'','vfree10':'','barcodevos':[{'nnumber':'','vbarcode':'','vbarcodesub':'','vboxbarcode':''}]}]}]}".getBytes("utf-8"));
                     } else
                         out.write(params.toString().getBytes("utf-8"));
 
@@ -153,8 +156,8 @@ public class HttpUtil {
     }
 
     //将map型转为请求参数型
-    public static String jsonencode(Map<String,Object> data) {
-        return JSONObject.toJSONString(data);
+    public static String jsonencode(Map<String,Object>data) {
+        return JSON.toJSONString(data);
     }
 
     //将map型转为请求参数型

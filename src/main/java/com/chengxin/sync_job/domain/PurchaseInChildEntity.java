@@ -6,10 +6,9 @@ package com.chengxin.sync_job.domain;
  * @desc 采购入库子表
  **/
 public class PurchaseInChildEntity {
-    private String materCode;//存货ID
-    private String floorCode;//货位ID
-    private String priceUnitAmt;//入库数量/实收数量
-    private String avePrice;//单价
+    private String materCode;//存货基本Id
+    private String priceUnitAmt;//订单数量
+    private String avePriceUnit;//辅计量单位
 
     public String getMaterCode() {
         return materCode;
@@ -17,14 +16,6 @@ public class PurchaseInChildEntity {
 
     public void setMaterCode(String materCode) {
         this.materCode = materCode;
-    }
-
-    public String getFloorCode() {
-        return floorCode;
-    }
-
-    public void setFloorCode(String floorCode) {
-        this.floorCode = floorCode;
     }
 
     public String getPriceUnitAmt() {
@@ -35,21 +26,20 @@ public class PurchaseInChildEntity {
         this.priceUnitAmt = priceUnitAmt;
     }
 
-    public String getAvePrice() {
-        return avePrice;
+    public String getAvePriceUnit() {
+        return avePriceUnit;
     }
 
-    public void setAvePrice(String aveprice) {
-        this.avePrice = aveprice;
+    public void setAvePriceUnit(String avePriceUnit) {
+        this.avePriceUnit = avePriceUnit;
     }
 
     @Override
     public String toString() {
         return "PurchaseInChildEntity{" +
                 "materCode='" + materCode + '\'' +
-                ", floorCode='" + floorCode + '\'' +
                 ", priceUnitAmt='" + priceUnitAmt + '\'' +
-                ", avePrice='" + avePrice + '\'' +
+                ", avepriceUnit='" + avePriceUnit + '\'' +
                 '}';
     }
 }

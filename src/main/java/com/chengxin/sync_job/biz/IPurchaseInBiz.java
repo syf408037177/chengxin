@@ -11,4 +11,10 @@ public interface IPurchaseInBiz {
      * @return
      */
     public List<PurchaseInParentEntity> findPurchaseInNoTransfer();
+
+    /**
+     * 获取采购入库数据
+     * @return
+     */
+    public String getPurchase();
 }
