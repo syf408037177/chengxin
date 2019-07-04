@@ -26,7 +26,37 @@
     <select id="getProvId" resultType="string">
         SELECT DISTINCT pk_cumandoc FROM [dbo].bd_cumandoc
         WHERE pk_cubasdoc = (SELECT DISTINCT pk_cubasdoc FROM [dbo].bd_cubasdoc WHERE custname = #{provYName} AND pk_corp = #{pkCorp})
+        AND pk_corp = #{pkCorp}
         AND (custflag = 1 OR custflag = 3)
     </select>
 
+    <!--查询供应商id-->
+    <select id="getProvId2" resultType="string">
+        SELECT DISTINCT pk_cumandoc FROM [dbo].bd_cumandoc
+        WHERE pk_cubasdoc = (SELECT DISTINCT pk_cubasdoc FROM [dbo].bd_cubasdoc WHERE custname = #{provYName} AND NOT pk_corp1 IS NULL)
+        AND pk_corp = #{pkCorp}
+        AND (custflag = 1 OR custflag = 3)
+    </select>
+
+    <!--查询库存组织-->
+    <select id="getCalbody" resultType="string">
+        SELECT DISTINCT settlestockorg FROM [dbo].bd_purorg WHERE ownercorp = #{erpOwnerCorp}
+    </select>
+
+    <!--查询供应商基本档案ID-->
+    <select id="getCubasdoc" resultType="string">
+        SELECT DISTINCT pk_cubasdoc FROM [dbo].bd_cubasdoc WHERE custname = #{erpProvName} AND pk_corp = #{pkCode}
+    </select>
+
+    <!--查询库存仓库-->
+    <select id="getCbodywarehouseid" resultType="string">
+        SELECT DISTINCT pk_stordoc FROM [dbo].bd_stordoc WHERE storcode = #{erpWareCode} AND pk_corp = #{pkCode}
+    </select>
+
+    <!--查询源头单据id-->
+    <select id="getFirstBillId" resultType="map">
+        SELECT s.corder_bid, s.corderid FROM po_order_b s
+        LEFT JOIN po_order m ON s.corderid = m.corderid
+        WHERE s.cbaseid = #{cbaseid} AND m.vdef9 = #{missionCode}
+    </select>
 </mapper>

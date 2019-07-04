@@ -7,38 +7,54 @@ import java.util.List;
  * @create 2019-05-06 13:49
  * @desc 采购入库主表数据实体
  **/
-public class PurchaseInParentEntity {
-    private String creatorCode;//审批人id
-    private String corpCode;//库存组织/公司
-    private String corpName;//库存组织/公司名称
-    private String operateDate;//最后修改日期
-    private String createDate;//制单日期/订单日期
-    private String specialCode;//供应商
+public class  PurchaseInParentEntity {
+    private String billCode;//单号
+    private String pkCode;//所属公司
+    private String provName;//供应商名称
+    private String cdptid;//部门id
+    private String uniqueid;//出入库单表头ID
+    private String operateDate;//库房签字日期
     private String status;//传输状态
     private List<PurchaseInChildEntity> purchaseInChilds;
 
-    public String getCreatorCode() {
-        return creatorCode;
+    public String getBillCode() {
+        return billCode;
     }
 
-    public void setCreatorCode(String creatorCode) {
-        this.creatorCode = creatorCode;
+    public void setBillCode(String billCode) {
+        this.billCode = billCode;
     }
 
-    public String getCorpCode() {
-        return corpCode;
+    public String getPkCode() {
+        return pkCode;
     }
 
-    public void setCorpCode(String corpCode) {
-        this.corpCode = corpCode;
+    public void setPkCode(String pkCode) {
+        this.pkCode = pkCode;
     }
 
-    public String getCorpName() {
-        return corpName;
+    public String getProvName() {
+        return provName;
     }
 
-    public void setCorpName(String corpName) {
-        this.corpName = corpName;
+    public void setProvName(String provName) {
+        this.provName = provName;
+    }
+
+    public String getCdptid() {
+        return cdptid;
+    }
+
+    public void setCdptid(String cdptid) {
+        this.cdptid = cdptid;
+    }
+
+    public String getUniqueid() {
+        return uniqueid;
+    }
+
+    public void setUniqueid(String uniqueid) {
+        this.uniqueid = uniqueid;
     }
 
     public String getOperateDate() {
@@ -47,14 +63,6 @@ public class PurchaseInParentEntity {
 
     public void setOperateDate(String operateDate) {
         this.operateDate = operateDate;
-    }
-
-    public String getSpecialCode() {
-        return specialCode;
-    }
-
-    public void setSpecialCode(String specialCode) {
-        this.specialCode = specialCode;
     }
 
     public String getStatus() {
@@ -71,26 +79,5 @@ public class PurchaseInParentEntity {
 
     public void setPurchaseInChilds(List<PurchaseInChildEntity> purchaseInChilds) {
         this.purchaseInChilds = purchaseInChilds;
-    }
-
-    public String getCreateDate() {
-        return createDate;
-    }
-
-    public void setCreateDate(String createDate) {
-        this.createDate = createDate;
-    }
-
-    @Override
-    public String toString() {
-        return "PurchaseInParentEntity{" +
-                "creatorCode='" + creatorCode + '\'' +
-                ", corpCode='" + corpCode + '\'' +
-                ", operateDate='" + operateDate + '\'' +
-                ", createDate='" + createDate + '\'' +
-                ", specialCode='" + specialCode + '\'' +
-                ", status='" + status + '\'' +
-                ", purchaseInChilds=" + purchaseInChilds +
-                '}';
     }
 }

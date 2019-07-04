@@ -7,14 +7,23 @@ import java.util.List;
 public interface IPurchaseInBiz {
 
     /**
-     * 查询未传输至用友接口的采购入库数据
+     * 查询未传输至用友接口的采购入库单数据
      * @return
      */
     public List<PurchaseInParentEntity> findPurchaseInNoTransfer();
 
     /**
-     * 获取采购入库数据
-     * @return
+     * 推送采购入库单数据
      */
-    public String getPurchase();
+    public void pushPurchaseInToYy();
+
+    /**
+     * 重推传输失败的采购入库单数据
+     */
+    public void reSyncFailOrder();
+
+    /**
+     * 修改采购入库单状态
+     */
+    public void modifyOrderStatus();
 }

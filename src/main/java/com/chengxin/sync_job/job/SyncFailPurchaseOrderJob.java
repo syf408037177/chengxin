@@ -1,6 +1,7 @@
 package com.chengxin.sync_job.job;
 
 import com.chengxin.sync_job.biz.IPurchaseOrderBiz;
+import com.chengxin.sync_job.common.Constants;
 import org.quartz.DisallowConcurrentExecution;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,8 +24,8 @@ public class SyncFailPurchaseOrderJob {
     private IPurchaseOrderBiz purchaseOrderBiz;
 
     public void sync() {
-        log.info("重推传输失败的采购订单任务执行开始,当前时间：" + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
+        log.info(Constants.RE_PUSH_TAG + "重推传输失败的采购订单任务执行开始,当前时间：" + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
         purchaseOrderBiz.reSyncFailOrder();
-        log.info("重推传输失败的采购订单任务执行结束,当前时间：" + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
+        log.info(Constants.RE_PUSH_TAG + "重推传输失败的采购订单任务执行结束,当前时间：" + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
     }
 }

@@ -53,7 +53,13 @@
           ON par.PROV_ID = pro.prov_code
           LEFT JOIN [dbo].sgBasCorpInfo cor
           ON par.receive_corpcode = cor.CORP_ID
-          WHERE bill_flag = '11000000' AND yyfinish_flag != 1 OR yyfinish_flag IS NULL
+          WHERE bill_flag = '11000000' AND (yyfinish_flag NOT IN ('1','2','3') OR yyfinish_flag IS NULL)
+          <if test="dgType == '249'">
+              AND par.receive_corpcode IN ('000010', '000011', '6')
+          </if>
+          <if test="dgType == '247'">
+              AND par.receive_corpcode IN ('000', '5', '6', '8')
+          </if>
         ) as b
         WHERE RowId BETWEEN 0 AND #{purchaseOrderCount}
     </select>
@@ -70,6 +76,12 @@
             LEFT JOIN [dbo].sgBasCorpInfo cor
             ON par.receive_corpcode = cor.CORP_ID
             WHERE bill_flag = '11000000' AND yyfinish_flag = 3
+            <if test="dgType == '249'">
+                AND par.receive_corpcode in ('000010', '000011', '6')
+            </if>
+            <if test="dgType == '247'">
+                AND par.receive_corpcode in ('000', '5', '6', '8')
+            </if>
         ) as b
         WHERE RowId BETWEEN 0 AND 1
     </select>
@@ -93,5 +105,10 @@
                 #{item}
             </foreach>
         </if>
+    </select>
+
+    <!--将校验失败的单号状态置为0-->
+    <select id="modifyFailOrderStatus" resultMap="BaseChildResultMap">
+        UPDATE [dbo].SgPpmOrder SET yyfinish_flag = 0 WHERE yyfinish_flag = 2
     </select>
 </mapper>

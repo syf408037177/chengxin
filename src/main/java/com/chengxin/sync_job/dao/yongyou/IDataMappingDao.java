@@ -1,8 +1,11 @@
 package com.chengxin.sync_job.dao.yongyou;
 
+import org.apache.ibatis.annotations.MapKey;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
+
+import java.util.Map;
 
 @Repository("dataMappingDao")
 @Mapper
@@ -47,4 +50,41 @@ public interface IDataMappingDao {
      * @return
      */
     public String getProvId(@Param("provYName") String provYName, @Param("pkCorp") String pkCorp);
+
+    /**
+     * 供应商id对照方法2
+     * @param provYName
+     * @param pkCorp
+     * @return
+     */
+    public String getProvId2(@Param("provYName") String provYName, @Param("pkCorp") String pkCorp);
+
+    /**
+     * 库存组织对照
+     * @param erpOwnerCorp
+     * @return
+     */
+    public String getCalbody(String erpOwnerCorp);
+
+    /**
+     * 供应商基本档案ID对照
+     * @param erpProvName
+     * @return
+     */
+    public String getCubasdoc(@Param("erpProvName") String erpProvName, @Param("pkCode") String pkCode);
+
+    /**
+     * 库存仓库对照
+     * @param erpWareCode
+     * @param pkCode
+     * @return
+     */
+    public String getCbodywarehouseid(@Param("erpWareCode") String erpWareCode, @Param("pkCode") String pkCode);
+
+    /**
+     * 源头单据id对照
+     * @param missionCode
+     * @return
+     */
+    public Map<String, String> getFirstBillId(@Param("missionCode") String missionCode, @Param("cbaseid") String cbaseId);
 }

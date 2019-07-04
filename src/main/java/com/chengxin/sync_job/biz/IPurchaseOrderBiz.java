@@ -21,4 +21,9 @@ public interface IPurchaseOrderBiz {
      * 重推传输失败的采购订单数据
      */
     public void reSyncFailOrder();
+
+    /**
+     * 修改采购订单状态
+     */
+    public void modifyOrderStatus();
 }

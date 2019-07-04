@@ -17,7 +17,23 @@ public class Constants {
     public static final String PUSH_STATUS_FAIL = "3";
 
     /**
-     * 重推失败
+     * 校验不通过
      */
-    public static final String REPUSH_STATUS_FAIL = "2";
+    public static final String CHECK_FAIL = "2";
+
+    /**
+     * 正常推送
+     */
+    public static final String PUSH_TAG = "[正常推送]=====";
+
+    /**
+     * 重新推送
+     */
+    public static final String RE_PUSH_TAG = "[重推]=====";
+
+    /**
+     * 修改状态
+     */
+    public static final String MODIFY_TAG = "[修改状态]=====";
+
 }

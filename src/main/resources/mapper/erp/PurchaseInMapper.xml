@@ -2,32 +2,34 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.chengxin.sync_job.dao.erp.IPurchaseInDao">
 
-    <!--采购入库主表字段-->
+    <!--采购入库单主表字段-->
     <sql id="PurchaseInParentColumn">
-        pur.uniqueId,
-        pur.creator_code,
-        pur.ware_code,
-        pur.corp_code,
-        pur.operate_date,
-        pur.create_date
+        par.bill_code,
+        par.uniqueid,
+        par.operate_date
     </sql>
 
-    <!--采购入库子表字段-->
+    <!--采购入库单子表字段-->
     <sql id="PurchaseInChildColumn">
-        mater_code,
-        PRICE_UNIT_amt,
-        Aveprice_unit
+        del.ware_code,
+        del.uniqueid,
+        del.masterid,
+        del.mater_code,
+        del.PRICE_UNIT_amt,
+        del.item_money,
+        del.AVEPRICE,
+        del.mission_code
     </sql>
 
     <!--主表映射-->
     <resultMap id="BaseParentResultMap" type="com.chengxin.sync_job.domain.PurchaseInParentEntity">
-        <result column="create_date" property="createDate"/>
-        <result column="creator_code" property="creatorCode"/>
-        <result column="corp_code" property="corpCode"/>
-        <result column="corp_name" property="corpName"/>
+        <result column="bill_code" property="billCode"/>
+        <result column="uniqueid" property="uniqueid"/>
         <result column="operate_date" property="operateDate"/>
-        <result column="provy_code" property="specialCode"/>
-        <collection property="purchaseInChilds" column="uniqueId" javaType="ArrayList"
+        <result column="prov_name" property="provName"/>
+        <result column="pk_deptdoc" property="cdptid"/>
+        <result column="ownercorp" property="pkCode"/>
+        <collection property="purchaseInChilds" column="uniqueid" javaType="ArrayList"
                     ofType="com.chengxin.sync_job.domain.PurchaseInChildEntity"
                     select="com.chengxin.sync_job.dao.erp.IPurchaseInDao.findPurchaseInChildByParentId">
         </collection>
@@ -35,30 +37,69 @@
 
     <!--子表映射-->
     <resultMap id="BaseChildResultMap" type="com.chengxin.sync_job.domain.PurchaseInChildEntity">
+        <result column="ware_code" property="wareCode"/>
+        <result column="uniqueid" property="uniqueid"/>
+        <result column="masterid" property="masterid"/>
         <result column="mater_code" property="materCode"/>
         <result column="PRICE_UNIT_amt" property="priceUnitAmt"/>
-        <result column="Aveprice_unit" property="avePriceUnit"/>
+        <result column="item_money" property="itemMoney"/>
+        <result column="AVEPRICE" property="avePrice"/>
+        <result column="mission_code" property="missionCode"/>
     </resultMap>
 
-    <!--查询未传输至用友的采购入库数据-->
+    <!--查询未传输至用友的采购入库单数据-->
     <select id="findPurchaseInParentNotTransfer" resultMap="BaseParentResultMap">
         SELECT * FROM (
-          SELECT
-            <include refid="PurchaseInParentColumn"/>, pro.provy_code,
-            ROW_NUMBER() OVER(ORDER BY operate_date DESC) AS RowId
-          FROM [dbo].sgRem_InStorageHistory pur
-          LEFT JOIN [dbo].sgBasProvInfo pro
-          ON pur.special_code = pro.prov_code
-          WHERE status != 1 OR status IS NULL AND bill_type = 8
+            SELECT
+                <include refid="PurchaseInParentColumn"/>, cor.pk_deptdoc, cor.ownercorp, pro.prov_name,
+                ROW_NUMBER() OVER(ORDER BY par.operate_date DESC) AS RowId
+            FROM [dbo].sgRem_InStorageHistory par
+            LEFT JOIN [dbo].sgbascorpinfo cor ON par.corp_code = cor.CORP_ID
+            LEFT JOIN [dbo].sgBasProvInfo pro ON par.special_code = pro.prov_code
+            WHERE (par.bill_code LIKE 'PS%' OR par.bill_code LIKE 'PR%' OR par.bill_code LIKE 'PSB%')
+            AND (par.yyfinish_flag NOT IN ('1','2','3') OR par.yyfinish_flag IS NULL)
+            AND par.operate_date &gt;= '2019-01-01 00:00:00'
+        ) as b
+        WHERE RowId BETWEEN 0 AND #{purchaseInCount}
+    </select>
+
+    <!--查询传输失败的采购入库单数据-->
+    <select id="findPurchaseInParentFail" resultMap="BaseParentResultMap">
+        SELECT * FROM (
+            SELECT
+            <include refid="PurchaseInParentColumn"/>, cor.pk_deptdoc, cor.ownercorp, pro.prov_name,
+            ROW_NUMBER() OVER(ORDER BY par.operate_date DESC) AS RowId
+            FROM [dbo].sgRem_InStorageHistory par
+            LEFT JOIN [dbo].sgbascorpinfo cor ON par.corp_code = cor.CORP_ID
+            LEFT JOIN [dbo].sgBasProvInfo pro ON par.special_code = pro.prov_code
+            WHERE (par.bill_code LIKE 'PS%' OR par.bill_code LIKE 'PR%' OR par.bill_code LIKE 'PSB%')
+            AND (par.yyfinish_flag = 3)
+            AND par.operate_date &gt;= '2019-01-01 00:00:00'
         ) as b
         WHERE RowId BETWEEN 0 AND 1
     </select>
 
-    <!--根据主表id查询字表数据-->
+    <!--根据主表id查询子表数据-->
     <select id="findPurchaseInChildByParentId" parameterType="java.lang.String" resultMap="BaseChildResultMap">
         SELECT
           <include refid="PurchaseInChildColumn"/>
-        FROM [dbo].sgRem_InStorageHistoryD
-        WHERE masterid = #{parentId}
+        FROM [dbo].sgRem_InStorageHistoryD del
+        WHERE del.masterid = #{parentId}
+    </select>
+
+    <!--修改采购入库单推送状态-->
+    <select id="updatePurchaseInStatus" resultMap="BaseChildResultMap">
+        <if test="parentIds != null and parentIds.size() > 0">
+            UPDATE [dbo].sgRem_InStorageHistory SET yyfinish_flag = #{yyFinishFlag}
+            WHERE uniqueid in
+            <foreach collection="parentIds" item="item" index="index" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+    </select>
+
+    <!--将校验失败的单号状态置为0-->
+    <select id="modifyFailInStatus" resultMap="BaseChildResultMap">
+        UPDATE [dbo].sgRem_InStorageHistory SET yyfinish_flag = 0 WHERE yyfinish_flag = 2
     </select>
 </mapper>
