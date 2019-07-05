@@ -1,5 +1,6 @@
 package com.chengxin.sync_job.dao.erp;
 
+import com.chengxin.sync_job.domain.PurchaseInChildEntity;
 import com.chengxin.sync_job.domain.PurchaseInParentEntity;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -28,7 +29,7 @@ public interface IPurchaseInDao {
      * @param parentId
      * @return
      */
-    public List<PurchaseInParentEntity> findPurchaseInChildByParentId(String parentId);
+    public List<PurchaseInChildEntity> findPurchaseInChildByParentId(String parentId);
 
     /**
      * 修改采购入库单推送状态
@@ -42,5 +43,5 @@ public interface IPurchaseInDao {
      * 将校验失败的单号状态置为0(可继续传输)
      * @return
      */
-    public Integer modifyFailOrderStatus();
+    public Integer modifyFailInStatus();
 }

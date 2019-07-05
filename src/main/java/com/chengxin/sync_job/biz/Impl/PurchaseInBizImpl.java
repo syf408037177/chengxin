@@ -73,7 +73,7 @@ public class PurchaseInBizImpl implements IPurchaseInBiz {
                     parentVO.put("cdptid", purchaseInParentEntity.getCdptid());//部门ID
                     parentVO.put("cbilltypecode", "45");//库存单据类型编码[45为采购入库]
                     parentVO.put("cbizid", "1005A110000000000J10");//业务员ID
-                    parentVO.put("cbiztype", "1005A110000000000009");//业务类型ID
+                    parentVO.put("cbiztype", "0001A11000000000AV12");//业务类型ID
                     parentVO.put("clastmodiid", "0001A11000000000066K");//最后修改人
                     parentVO.put("coperatorid", "0001A11000000000066K");//制单人
                     parentVO.put("cregister", "0001A11000000000066K");//库房签字人
@@ -135,6 +135,11 @@ public class PurchaseInBizImpl implements IPurchaseInBiz {
                                 child.put("cgeneralbid", "B" + entity.getUniqueid());//出入库单表体主键
                                 child.put("cgeneralhid", "B" + entity.getMasterid());//出入库单表头主键
                                 Map<String, String> firstBillId = dataMapping.getFirstBillId("9" + entity.getMissionCode(), cinvbasid);
+                                if(firstBillId == null) {
+                                    log.error("该入库单找不到源头单据信息,不进行传输!单号为:" + purchaseInParentEntity.getBillCode());
+                                    childVO.clear();
+                                    break;
+                                }
                                 child.put("cfirstbillbid", firstBillId.get("corder_bid"));//源头单据表体ID
                                 child.put("cfirstbillhid", firstBillId.get("corderid"));//源头单据表头ID
                                 child.put("csourcebillbid", firstBillId.get("corder_bid"));//来源单据表体序列号
@@ -143,6 +148,11 @@ public class PurchaseInBizImpl implements IPurchaseInBiz {
                                 child.put("cgeneralbid", "A" + entity.getUniqueid());//出入库单表体主键
                                 child.put("cgeneralhid", "A" + entity.getMasterid());//出入库单表头主键
                                 Map<String, String> firstBillId = dataMapping.getFirstBillId("7" + entity.getMissionCode(), cinvbasid);
+                                if(firstBillId == null) {
+                                    log.error("该入库单找不到源头单据信息,不进行传输!单号为:" + purchaseInParentEntity.getBillCode());
+                                    childVO.clear();
+                                    break;
+                                }
                                 child.put("cfirstbillbid", firstBillId.get("corder_bid"));//源头单据表体ID
                                 child.put("cfirstbillhid", firstBillId.get("corderid"));//源头单据表头ID
                                 child.put("csourcebillbid", firstBillId.get("corder_bid"));//来源单据表体序列号
@@ -177,6 +187,11 @@ public class PurchaseInBizImpl implements IPurchaseInBiz {
                         continue;
                     }
                     parentVO.put("cwarehouseid", cbodywarehouseid);//仓库id
+                    if(childVO.size() == 0) {
+                        log.error("该采购入库单子表校验未通过,则不进行传输,单号:" + purchaseInParentEntity.getBillCode());
+                        checkFailIds.add(purchaseInParentEntity.getUniqueid());
+                        continue;
+                    }
                     JSONObject purchase = new JSONObject();
                     purchase.put("ParentVO", parentVO);
                     purchase.put("ChildrenVO", childVO);
@@ -294,7 +309,7 @@ public class PurchaseInBizImpl implements IPurchaseInBiz {
     @Override
     public void modifyOrderStatus() {
         try {
-            purchaseInDao.modifyFailOrderStatus();
+            purchaseInDao.modifyFailInStatus();
         } catch (Exception e) {
             log.error(Constants.MODIFY_TAG + "将校验失败的采购入库单号状态置为0异常!", e);
         }

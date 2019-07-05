@@ -1,6 +1,8 @@
 package com.chengxin.sync_job.config;
 
-import com.chengxin.sync_job.job.*;
+import com.chengxin.sync_job.job.ModifyArriveOrderStatusJob;
+import com.chengxin.sync_job.job.SyncFailArriveOrderJob;
+import com.chengxin.sync_job.job.SyncArriveOrderJob;
 import org.quartz.JobDetail;
 import org.quartz.Trigger;
 import org.springframework.beans.factory.annotation.Value;
@@ -15,32 +17,32 @@ import org.springframework.scheduling.quartz.SchedulerFactoryBean;
  * @create 2019-05-05 9:50
  * @desc 采购入库quartz配置
  **/
-//@Configuration
-public class PurchaseInQuartzConfiguration {
+@Configuration
+public class ArriveOrderQuartzConfiguration {
     //采购入库任务周期
-    @Value("${sync_purchase_in_cron}")
-    private String syncPurchaseInCron;
+    @Value("${sync_arrive_order_cron}")
+    private String syncArriveOrderCron;
 
     //重推采购入库周期
-    @Value("${sync_fail_purchase_in_cron}")
-    private String syncFailPurchaseInCron;
+    @Value("${sync_fail_arrive_order_cron}")
+    private String syncFailArriveOrderCron;
 
     @Value("${modify_order_status_cron}")
     private String modifyOrderStatusCron;
 
     /**
-     * 配置修改采购入库单状态任务
+     * 配置修改收货单状态任务
      *
-     * @param modifyPurchaseInStatusJob syncJob为需要执行的任务
+     * @param modifyArriveOrderStatusJob syncJob为需要执行的任务
      * @return
      */
-    @Bean(name = "modifyPurchaseInStatusJobDetail")
-    public MethodInvokingJobDetailFactoryBean modifyPurchaseInJobDetail(ModifyPurchaseInStatusJob modifyPurchaseInStatusJob) {
+    @Bean(name = "modifyArriveOrderStatusJobDetail")
+    public MethodInvokingJobDetailFactoryBean modifyArriveOrderJobDetail(ModifyArriveOrderStatusJob modifyArriveOrderStatusJob) {
         MethodInvokingJobDetailFactoryBean jobDetail = new MethodInvokingJobDetailFactoryBean();
         // 是否并发执行
         jobDetail.setConcurrent(false);
         // 需要执行的对象
-        jobDetail.setTargetObject(modifyPurchaseInStatusJob);
+        jobDetail.setTargetObject(modifyArriveOrderStatusJob);
         /*
          * 执行QuartzTask类中的需要执行方法
          */
@@ -49,18 +51,18 @@ public class PurchaseInQuartzConfiguration {
     }
 
     /**
-     * 配置采购入库单推送任务
+     * 配置收货单推送任务
      *
-     * @param syncPurchaseInJob syncJob为需要执行的任务
+     * @param syncArriveOrderJob syncJob为需要执行的任务
      * @return
      */
-    @Bean(name = "syncPurchaseInJobDetail")
-    public MethodInvokingJobDetailFactoryBean syncPurchaseInJobDetail(SyncPurchaseInJob syncPurchaseInJob) {
+    @Bean(name = "syncArriveOrderJobDetail")
+    public MethodInvokingJobDetailFactoryBean syncArriveOrderJobDetail(SyncArriveOrderJob syncArriveOrderJob) {
         MethodInvokingJobDetailFactoryBean jobDetail = new MethodInvokingJobDetailFactoryBean();
         // 是否并发执行
         jobDetail.setConcurrent(false);
         // 需要执行的对象
-        jobDetail.setTargetObject(syncPurchaseInJob);
+        jobDetail.setTargetObject(syncArriveOrderJob);
         /*
          * 执行QuartzTask类中的需要执行方法
          */
@@ -69,18 +71,18 @@ public class PurchaseInQuartzConfiguration {
     }
 
     /**
-     * 配置重推采购入库单任务
+     * 配置重推收货单任务
      *
-     * @param syncFailPurchaseInJob syncJob为需要执行的任务
+     * @param syncFailArriveOrderJob syncJob为需要执行的任务
      * @return
      */
-    @Bean(name = "syncFailPurchaseInJobDetail")
-    public MethodInvokingJobDetailFactoryBean syncFailPurchaseInJobDetail(SyncFailPurchaseInJob syncFailPurchaseInJob) {
+    @Bean(name = "syncFailArriveOrderJobDetail")
+    public MethodInvokingJobDetailFactoryBean syncFailArriveOrderJobDetail(SyncFailArriveOrderJob syncFailArriveOrderJob) {
         MethodInvokingJobDetailFactoryBean jobDetail = new MethodInvokingJobDetailFactoryBean();
         // 是否并发执行
         jobDetail.setConcurrent(false);
         // 需要执行的对象
-        jobDetail.setTargetObject(syncFailPurchaseInJob);
+        jobDetail.setTargetObject(syncFailArriveOrderJob);
         /*
          * 执行QuartzTask类中的需要执行方法
          */
@@ -91,56 +93,56 @@ public class PurchaseInQuartzConfiguration {
     /**
      * 修改采购入库状态任务定时触发器
      *
-     * @param modifyPurchaseInStatusJobDetail 任务
+     * @param modifyArriveOrderStatusJobDetail 任务
      * @return
      */
-    @Bean(name = "modifyPurchaseInStatusJobTrigger")
-    public CronTriggerFactoryBean modifyPurchaseInJobTrigger(JobDetail modifyPurchaseInStatusJobDetail) {
+    @Bean(name = "modifyArriveOrderStatusJobTrigger")
+    public CronTriggerFactoryBean modifyArriveOrderJobTrigger(JobDetail modifyArriveOrderStatusJobDetail) {
         CronTriggerFactoryBean tigger = new CronTriggerFactoryBean();
-        tigger.setJobDetail(modifyPurchaseInStatusJobDetail);
+        tigger.setJobDetail(modifyArriveOrderStatusJobDetail);
         //cron表达式，每1分钟执行一次
         tigger.setCronExpression(modifyOrderStatusCron);
         return tigger;
     }
 
     /**
-     * 采购入库单定时触发器
+     * 收货单定时触发器
      *
-     * @param syncPurchaseInJobDetail 任务
+     * @param syncArriveOrderJobDetail 任务
      * @return
      */
-    @Bean(name = "syncPurchaseInJobTrigger")
-    public CronTriggerFactoryBean syncPurchaseOrderJobTrigger(JobDetail syncPurchaseInJobDetail) {
+    @Bean(name = "syncArriveOrderJobTrigger")
+    public CronTriggerFactoryBean syncPurchaseOrderJobTrigger(JobDetail syncArriveOrderJobDetail) {
         CronTriggerFactoryBean tigger = new CronTriggerFactoryBean();
-        tigger.setJobDetail(syncPurchaseInJobDetail);
+        tigger.setJobDetail(syncArriveOrderJobDetail);
         //cron表达式，每1分钟执行一次
-        tigger.setCronExpression(syncPurchaseInCron);
+        tigger.setCronExpression(syncArriveOrderCron);
         return tigger;
     }
 
     /**
-     * 重推采购入库单定时触发器
+     * 重推收货单定时触发器
      *
-     * @param syncFailPurchaseInJobDetail 任务
+     * @param syncFailArriveOrderJobDetail 任务
      * @return
      */
-    @Bean(name = "syncFailPurchaseInJobTrigger")
-    public CronTriggerFactoryBean syncFailPurchaseOrderJobTrigger(JobDetail syncFailPurchaseInJobDetail) {
+    @Bean(name = "syncFailArriveOrderJobTrigger")
+    public CronTriggerFactoryBean syncFailPurchaseOrderJobTrigger(JobDetail syncFailArriveOrderJobDetail) {
         CronTriggerFactoryBean tigger = new CronTriggerFactoryBean();
-        tigger.setJobDetail(syncFailPurchaseInJobDetail);
+        tigger.setJobDetail(syncFailArriveOrderJobDetail);
         //cron表达式，每1分钟执行一次
-        tigger.setCronExpression(syncFailPurchaseInCron);
+        tigger.setCronExpression(syncFailArriveOrderCron);
         return tigger;
     }
 
     /**
      * 调度工厂
      *
-     * @param syncPurchaseInJobTrigger
+     * @param syncArriveOrderJobTrigger
      * @return
      */
     @Bean(name = "schedulerIn1")
-    public SchedulerFactoryBean schedulerFactory(Trigger syncPurchaseInJobTrigger) {
+    public SchedulerFactoryBean schedulerFactory(Trigger syncArriveOrderJobTrigger) {
 
         SchedulerFactoryBean factoryBean = new SchedulerFactoryBean();
 
@@ -151,12 +153,12 @@ public class PurchaseInQuartzConfiguration {
         factoryBean.setStartupDelay(10);
 
         // 注册触发器
-        factoryBean.setTriggers(syncPurchaseInJobTrigger);
+        factoryBean.setTriggers(syncArriveOrderJobTrigger);
         return factoryBean;
     }
 
     @Bean(name = "schedulerIn2")
-    public SchedulerFactoryBean purchaseInFailSchedulerFactory(Trigger syncFailPurchaseInJobTrigger) {
+    public SchedulerFactoryBean ArriveOrderFailSchedulerFactory(Trigger syncFailArriveOrderJobTrigger) {
 
         SchedulerFactoryBean factoryBean = new SchedulerFactoryBean();
 
@@ -167,12 +169,12 @@ public class PurchaseInQuartzConfiguration {
         factoryBean.setStartupDelay(10);
 
         // 注册触发器
-        factoryBean.setTriggers(syncFailPurchaseInJobTrigger);
+        factoryBean.setTriggers(syncFailArriveOrderJobTrigger);
         return factoryBean;
     }
 
     @Bean(name = "schedulerIn3")
-    public SchedulerFactoryBean modifyInStatusSchedulerFactory(Trigger modifyPurchaseInStatusJobTrigger) {
+    public SchedulerFactoryBean modifyInStatusSchedulerFactory(Trigger modifyArriveOrderStatusJobTrigger) {
 
         SchedulerFactoryBean factoryBean = new SchedulerFactoryBean();
 
@@ -183,7 +185,7 @@ public class PurchaseInQuartzConfiguration {
         factoryBean.setStartupDelay(10);
 
         // 注册触发器
-        factoryBean.setTriggers(modifyPurchaseInStatusJobTrigger);
+        factoryBean.setTriggers(modifyArriveOrderStatusJobTrigger);
         return factoryBean;
     }
 

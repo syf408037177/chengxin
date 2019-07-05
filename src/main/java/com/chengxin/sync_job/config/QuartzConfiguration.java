@@ -16,7 +16,7 @@ import org.springframework.scheduling.quartz.SchedulerFactoryBean;
  * @create 2019-05-05 9:50
  * @desc quartz配置
  **/
-@Configuration
+//@Configuration
 public class QuartzConfiguration {
     //采购订单任务周期
     @Value("${sync_purchase_order_cron}")
